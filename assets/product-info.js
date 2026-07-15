@@ -126,9 +126,11 @@ if (!customElements.get('product-info')) {
             const html = new DOMParser().parseFromString(responseText, 'text/html');
             callback(html);
 
-
+            // Dispatch a custom event with the variantId to notify other components of the variant change
             const variantId = html.querySelector("product-form [name='id']").value;
-            document.dispatchEvent( new customEvent("variant:updated", {
+            console.log('Dispatching variant:updated event with variantId from product-info.js:', variantId);
+            
+            document.dispatchEvent( new CustomEvent("variant:updated", {
               detail: {
                 variantId: variantId,
               }

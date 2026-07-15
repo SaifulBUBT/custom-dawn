@@ -229,6 +229,8 @@
                       </span>
                     {% endif %}
                   </div>
+
+
                 {%- when 'description' -%}
                   {%- if product.description != blank -%}
                     <div class="product__description rte quick-add-hidden" {{ block.shopify_attributes }}>
@@ -799,8 +801,20 @@
     const variantId = event.detail.variantId;
     const url = `${productUrl}?variant=${variantId}&section_id=${sectionId}`;
 
-    console.log(url)
-    
+    console.log('variant:updated event received in main-product.liquid with variantId:', variantId);
+
+    fetch(url)
+      .then((response) => response.text())
+      .then((responseText) => {
+        const html = new DOMParser().parseFromString(responseText, 'text/html');
+        const newInventory = html.querySelector('#InventoryStatus');
+        const currentInventory = document.querySelector('#InventoryStatus');
+
+        if (newInventory && currentInventory) {
+          currentInventory.replaceWith(newInventory);
+        }
+      })
+      .catch((error) => console.error('Error updating inventory status:', error)); 
   });
 </script>
 
