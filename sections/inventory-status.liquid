@@ -1,0 +1,38 @@
+<div
+class="inventory-status"
+id="InventoryStatus"
+data-inventory-policy="{{ product.selected_or_first_available_variant.inventory_policy }}"
+>
+    {% assign variant = product.selected_or_first_available_variant %}
+
+    {% if variant.available %}
+        {% if variant.inventory_management == 'shopify' %}
+        {% if variant.inventory_quantity > 0 %}
+            <span class="inventory-status__in-stock">
+            In Stock ({{ variant.inventory_quantity }} available)
+            </span>
+        {% else %}
+            {% if variant.inventory_policy == 'continue' %}
+            <span class="inventory-status__backorder">
+                Available on Backorder
+            </span>
+            {% else %}
+            <span class="inventory-status__out-of-stock">
+                Out of Stock
+            </span>
+            {% endif %}
+        {% endif %}
+        {% else %}
+        <span class="inventory-status__in-stock">
+            In Stock
+        </span>
+        {% endif %}
+    {% else %}
+        <span class="inventory-status__out-of-stock">
+        Out of Stock
+        </span>
+    {% endif %}
+</div>
+
+
+{% comment %} http://127.0.0.1:9292/products/product-2?variant=40730340327601&section_id=inventory-status {% endcomment %}

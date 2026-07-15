@@ -125,11 +125,21 @@ if (!customElements.get('product-info')) {
             this.pendingRequestUrl = null;
             const html = new DOMParser().parseFromString(responseText, 'text/html');
             callback(html);
+
+
+            const variantId = html.querySelector("product-form [name='id']").value;
+            document.dispatchEvent( new customEvent("variant:updated", {
+              detail: {
+                variantId: variantId,
+              }
+            }))
+
+
             // set focus to last clicked option value
             document.querySelector(`#${targetId}`)?.focus();
           })
           .catch((error) => {
-            if (error.name === 'AbortError') {
+            if (error.name === 'AbortError') {40730340294833
               console.log('Fetch aborted by user');
             } else {
               console.error(error);
